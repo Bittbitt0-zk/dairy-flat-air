@@ -1,65 +1,190 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { AIRPORTS } from "@/lib/flightData";
 
-export default function Home() {
+const ROUTES = [
+  {
+    from: "NZNE",
+    to: "YSSY",
+    label: "Dairy Flat → Sydney",
+    freq: "Weekly · Fridays",
+    price: "from NZD 1,850",
+    icon: "🛫",
+  },
+  {
+    from: "NZNE",
+    to: "NZRO",
+    label: "Dairy Flat → Rotorua",
+    freq: "Daily shuttle · Mon–Fri",
+    price: "from NZD 220",
+    icon: "🌋",
+  },
+  {
+    from: "NZNE",
+    to: "NZGB",
+    label: "Dairy Flat → Great Barrier Island",
+    freq: "3× weekly",
+    price: "from NZD 195",
+    icon: "🏝️",
+  },
+  {
+    from: "NZNE",
+    to: "NZCI",
+    label: "Dairy Flat → Chatham Islands",
+    freq: "2× weekly",
+    price: "from NZD 480",
+    icon: "🌊",
+  },
+  {
+    from: "NZNE",
+    to: "NZTL",
+    label: "Dairy Flat → Lake Tekapo",
+    freq: "Weekly · Mondays",
+    price: "from NZD 360",
+    icon: "⛰️",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      {/* Hero */}
+      <section className="hero">
+        <p className="hero-eyebrow">Private Jet Experience · New Zealand &amp; Beyond</p>
+        <h1>
+          Fly the way it was{" "}
+          <em>meant to be</em>
+        </h1>
+        <p>
+          Luxury point-to-point service from Dairy Flat Airport — no crowds,
+          no queues, just you and the sky.
+        </p>
+        <Link href="/search" className="btn btn-gold" style={{ fontSize: "1.05rem", padding: "1rem 2.5rem" }}>
+          Search Flights →
+        </Link>
+      </section>
+
+      {/* Route cards */}
+      <section className="page-container">
+        <h2 className="page-title">Our Routes</h2>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gap: "1.25rem",
+          }}
+        >
+          {ROUTES.map((r) => (
+            <Link
+              key={r.label}
+              href={`/search?orig=${r.from}&dest=${r.to}`}
+              style={{ textDecoration: "none" }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              <div
+                className="card"
+                style={{
+                  cursor: "pointer",
+                  transition: "transform 0.2s, box-shadow 0.2s",
+                  border: "2px solid var(--cream-dark)",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.transform =
+                    "translateY(-4px)";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "var(--shadow-lg)";
+                  (e.currentTarget as HTMLDivElement).style.borderColor =
+                    "var(--gold)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLDivElement).style.transform = "";
+                  (e.currentTarget as HTMLDivElement).style.boxShadow =
+                    "var(--shadow)";
+                  (e.currentTarget as HTMLDivElement).style.borderColor =
+                    "var(--cream-dark)";
+                }}
+              >
+                <div style={{ fontSize: "2.5rem", marginBottom: "0.75rem" }}>
+                  {r.icon}
+                </div>
+                <h3
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.1rem",
+                    marginBottom: "0.4rem",
+                    color: "var(--navy)",
+                  }}
+                >
+                  {r.label}
+                </h3>
+                <p style={{ fontSize: "0.85rem", color: "var(--text-muted)", marginBottom: "0.75rem" }}>
+                  {r.freq}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "1.1rem",
+                    color: "var(--gold)",
+                    fontWeight: 700,
+                  }}
+                >
+                  {r.price}
+                </p>
+              </div>
+            </Link>
+          ))}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        {/* Fleet info */}
+        <div style={{ marginTop: "4rem" }}>
+          <h2 className="page-title">The Fleet</h2>
+          <div className="card" style={{ border: "2px solid var(--cream-dark)" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ borderBottom: "2px solid var(--cream-dark)" }}>
+                  {["Aircraft", "Capacity", "Routes"].map((h) => (
+                    <th
+                      key={h}
+                      style={{
+                        textAlign: "left",
+                        padding: "0.75rem 1rem",
+                        fontSize: "0.75rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.08em",
+                        color: "var(--text-muted)",
+                      }}
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { name: "SyberJet SJ30i", cap: 6, routes: "Sydney prestige service" },
+                  { name: "Cirrus SF50 (×2)", cap: 4, routes: "Rotorua shuttle & Great Barrier Island" },
+                  { name: "HondaJet Elite (×2)", cap: 5, routes: "Chatham Islands & Lake Tekapo" },
+                ].map((row) => (
+                  <tr
+                    key={row.name}
+                    style={{ borderBottom: "1px solid var(--cream-dark)" }}
+                  >
+                    <td style={{ padding: "0.9rem 1rem", fontWeight: 600 }}>
+                      {row.name}
+                    </td>
+                    <td style={{ padding: "0.9rem 1rem", color: "var(--text-muted)" }}>
+                      {row.cap} passengers
+                    </td>
+                    <td style={{ padding: "0.9rem 1rem", color: "var(--text-muted)" }}>
+                      {row.routes}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </main>
-    </div>
+      </section>
+    </>
   );
 }
